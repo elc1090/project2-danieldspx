@@ -81,6 +81,7 @@
 
 		.hero-appearances li {
 			margin: 5px 0;
+			position: relative;
 		}
 
 		footer {
@@ -118,6 +119,27 @@
 		/* Styles for the button when hovered */
 		.hero-button:hover {
 			background-color: #0062cc;
+		}
+
+
+		@keyframes spinner {
+			to {transform: rotate(360deg);}
+		}
+		
+		.spinner:before {
+			content: '';
+			box-sizing: border-box;
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			width: 20px;
+			height: 20px;
+			margin-top: -10px;
+			margin-left: -10px;
+			border-radius: 50%;
+			border: 2px solid #ccc;
+			border-top-color: #000;
+			animation: spinner .6s linear infinite;
 		}
   </style>
 </head>
@@ -165,6 +187,8 @@
 		btn.addEventListener('click', fetchHeroes);
 
 		function fetchHeroes() {
+			document.querySelector(`#hero1 .hero-appearances`).innerHTML = '<span class="spinner"></span>';
+			document.querySelector(`#hero2 .hero-appearances`).innerHTML = '<span class="spinner"></span>';
 			// Generate a timestamp
 			const timestamp = Date.now();
 
@@ -172,7 +196,7 @@
 			const hash = md5(timestamp + privateKey + publicKey);
 
 			// Create the API request URL with the required parameters
-			const apiUrl = `https://gateway.marvel.com/v1/public/characters?ts=${timestamp}&apikey=${publicKey}&hash=${hash}`;
+			const apiUrl = `https://gateway.marvel.com/v1/public/characters?ts=${timestamp}&apikey=${publicKey}&hash=${hash}&limit=50&offset=${Math.floor(Math.random() * 30)*50}`;
 
 			// Make the API request using the fetch() function
 			fetch(apiUrl)
